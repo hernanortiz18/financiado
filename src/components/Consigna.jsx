@@ -16,7 +16,7 @@ export const Consigna = () => {
       <h5>- La desición siempre será tuya</h5>
       <br/>
       <h3>Traenos tu auto. ¡Te ayudaremos a venderlo!</h3>
-      <Map/>
+      {/* <Map/> */}
       <div>
         <h3>¿Querés ganar tiempo?:</h3>
         {user ? (

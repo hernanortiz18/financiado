@@ -3,7 +3,7 @@ import { ItemCounter } from "./ItemCounter";
 import { CartContext } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
 import { Card, Button } from "react-bootstrap";
-import ImgXDefecto from "../assets/LogoSuperAuto1Transparente.svg";
+import ImgXDefecto from "../assets/financiadoLogo.jpg";
 import { Link } from "react-router-dom";
 
 export const ItemDetail = ({ item }) => {

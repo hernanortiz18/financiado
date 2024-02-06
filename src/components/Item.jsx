@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
-import ImgXDefecto from "../assets/LogoSuperAuto1Transparente.svg";
+import ImgXDefecto from "../assets/financiadoLogo.jpg";
 
 export const Item = ({ item, index }) => {
   const carouselId = `carousel-${index}`; // Genera un identificador único para cada tarjeta
