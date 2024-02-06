@@ -1,6 +1,6 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
-import logo from "../assets/logoSuperAutoTransparente2.png";
+import logo from "../assets/financiadoLogo.jpg"
 import { NavLink } from "react-router-dom";
 
 function Footer() {

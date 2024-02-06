@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import logo from "../assets/LogoSuperAutoTransparente2.png";
+import logo from "../assets/financiadoLogo.jpg";
 import { CartWidget } from "./CartWidget";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
