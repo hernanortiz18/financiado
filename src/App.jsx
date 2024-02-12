@@ -5,7 +5,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
 import ProfileEditor from "./components/ProfileEditor";
-import VehicleForm from "./components/vehicles/VehicleForm";
+// import VehicleForm from "./components/vehicles/VehicleForm";
 import VehicleList from "./components/vehicles/VehicleList";
 import { Error404 } from "./components/Error404";
 import { ItemDetailContainer } from "./components/ItemDetailContainer";
@@ -18,7 +18,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import { Consigna } from "./components/Consigna";
 import MassVehicleUpload from "./components/vehicles/MassVehicleUpload";
 import VehicleEdit from "./components/vehicles/VehicleEdit";
-import Map from "./components/Map";
+// import Map from "./components/Map";
 
 function App() {
   return (
