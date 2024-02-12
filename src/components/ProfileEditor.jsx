@@ -25,82 +25,84 @@ const ProfileEditor = () => {
     direccion: "",
     telefono: "",
     fotoPerfil: "",
+    rol:"",
   });
   const [selectedFile, setSelectedFile] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (auth.user) {
-          const userDocRef = doc(db, "users", auth.user.uid);
-          const userDocSnapshot = await getDoc(userDocRef);
-  
-          if (userDocSnapshot.exists()) {
-            setUserData(userDocSnapshot.data());
-          } else {
-            // Si el documento del usuario no existe en Firestore.
-            // Creamos un nuevo documento con todas las propiedades, incluyendo el rol.
-            await setDoc(userDocRef, {
-              rol: "customer",
-              nombre: "",
-              apellido: "",
-              dni: "",
-              direccion: "",
-              telefono: "",
-              fotoPerfil: "",
-            }, { merge: true }); // Usar merge: true para no sobrescribir las propiedades existentes
-            
-            console.log("Nuevo documento de usuario creado en Firestore");
-            setShowAlert(true);
-            setTimeout(() => {
-              setShowAlert(false);
-              // Restablecer el formulario o redirigir
-            }, 2000);
-          }
-        }
-      } catch (error) {
-        console.error("Error al obtener datos del usuario en Firestore:", error);
-      }
-    };
-  
-    fetchData();
-  }, [auth.user, db]);
-  
   // useEffect(() => {
-  //   // Cargar los datos actuales del usuario al montar el componente
   //   const fetchData = async () => {
   //     try {
   //       if (auth.user) {
   //         const userDocRef = doc(db, "users", auth.user.uid);
   //         const userDocSnapshot = await getDoc(userDocRef);
-
+  
   //         if (userDocSnapshot.exists()) {
   //           setUserData(userDocSnapshot.data());
   //         } else {
   //           // Si el documento del usuario no existe en Firestore.
-  //           // Creamos un nuevo documento con el rol "customer".
-  //           await setDoc(userDocRef, { rol: "customer" }, { merge: true });
+  //           // Creamos un nuevo documento con todas las propiedades, incluyendo el rol.
+  //           await setDoc(userDocRef, {
+  //             rol: "customer",
+  //             nombre: "",
+  //             apellido: "",
+  //             dni: "",
+  //             direccion: "",
+  //             telefono: "",
+  //             fotoPerfil: "",
+  //           }, { merge: true }); // Usar merge: true para no sobrescribir las propiedades existentes
+            
   //           console.log("Nuevo documento de usuario creado en Firestore");
   //           setShowAlert(true);
   //           setTimeout(() => {
   //             setShowAlert(false);
   //             // Restablecer el formulario o redirigir
   //           }, 2000);
-
-  //           // Actualizamos el estado con los datos predeterminados.
-  //           setUserData({ rol: "customer" });
   //         }
   //       }
   //     } catch (error) {
-  //       console.error(
-  //         "Error al obtener datos del usuario en Firestore:",
-  //         error
-  //       );
+  //       console.error("Error al obtener datos del usuario en Firestore:", error);
   //     }
   //   };
-
+  
   //   fetchData();
   // }, [auth.user, db]);
+  
+  useEffect(() => {
+    // Cargar los datos actuales del usuario al montar el componente
+    const fetchData = async () => {
+      try {
+        if (auth.user) {
+          const userDocRef = doc(db, "users", auth.user.uid);
+          const userDocSnapshot = await getDoc(userDocRef);
+
+          if (userDocSnapshot.exists()) {
+            setUserData(userDocSnapshot.data());
+          } else {
+            // Si el documento del usuario no existe en Firestore.
+            // Creamos un nuevo documento con el rol "customer".
+            await setDoc(userDocRef, { rol: "customer" }, { merge: true });
+            console.log("Nuevo documento de usuario creado en Firestore");
+            setShowAlert(true);
+            setTimeout(() => {
+              setShowAlert(false);
+              // Restablecer el formulario o redirigir
+            }, 2000);
+
+            // Actualizamos el estado con los datos predeterminados.
+            setUserData({ rol: "customer" });
+            console.log("rol actualizado con éxito, espero.... borrar este console.log")
+          }
+        }
+      } catch (error) {
+        console.error(
+          "Error al obtener datos del usuario en Firestore:",
+          error
+        );
+      }
+    };
+
+    fetchData();
+  }, [auth.user, db]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -144,6 +146,8 @@ const ProfileEditor = () => {
     try {
       const userDocRef = doc(db, "users", auth.user.uid);
 
+      console.log("userData antes de updateDoc:", userData);
+      
       await updateDoc(userDocRef, userData);
       console.log("Datos actualizados con éxito en Firestore");
       setShowAlert(true);
