@@ -10,7 +10,7 @@ function NavBar() {
   const auth = useAuth();
   const navigate = useNavigate();
   const userDisplayName = auth.userName || "Usuario invitado";
-  const { userFotoPerfil} = useAuth();
+  const { userFotoPerfil } = useAuth();
   const userPhotoURL = userFotoPerfil || auth.user?.photoURL || null;
   const renderProfileLink = () => {
     return (
@@ -62,6 +62,21 @@ function NavBar() {
             <NavDropdown.Item as={NavLink} to="/admindashboard">
               Dashboard Administrador
             </NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="/dashboardsupervisor">
+              Dashboard Supervisor
+            </NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="/dashboardvendedor">
+              Dashboard Vendedor
+            </NavDropdown.Item>
+          </>
+        );
+      case "SUPERVISOR":
+        return (
+          <>
+            <NavDropdown.Divider />
+            <NavDropdown.Item as={NavLink} to="/dashboardsupervisor">
+              Dashboard Supervisor
+            </NavDropdown.Item>
             <NavDropdown.Item as={NavLink} to="/dashboardvendedor">
               Dashboard Vendedor
             </NavDropdown.Item>
@@ -87,17 +102,38 @@ function NavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <NavLink to="category/0kms" className="nav-link">
-              0 kms
-            </NavLink>
-            <NavLink to="category/usados" className="nav-link">
-              Usados
+            <NavDropdown title="Automotores">
+              <NavDropdown.Divider />
+              <NavDropdown.Item
+                as={NavLink}
+                to="category/0kms"
+                className="nav-link"
+              >
+                0 kms
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                as={NavLink}
+                to="category/usados"
+                className="nav-link"
+              >
+                Usados
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                as={NavLink}
+                to="category/destacados"
+                className="nav-link"
+              >
+                Destacados
+              </NavDropdown.Item>
+            </NavDropdown>
+            <NavLink to="category/destacados" className="nav-link">
+              Maquinaria Agrícola
             </NavLink>
             <NavLink to="category/destacados" className="nav-link">
-              Destacados
+              Maquinaria Vial
             </NavLink>
             <NavLink to="consigna" className="nav-link">
-              Vendé tu auto
+              Vendé con nosotros
             </NavLink>
           </Nav>
         </Navbar.Collapse>

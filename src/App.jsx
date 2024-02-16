@@ -93,8 +93,21 @@ function App() {
             <Route path="/map" element={<Map />} />
             <Route path="/consigna" element={<Consigna />} />
             <Route path="/perfil" element={<ProfileEditor />} />
-            <Route path="/dashboardvendedor" element={<SellerDashboard />} />
-            <Route path="/admindashboard" element={<AdminDashboard />} />
+            <Route
+              path="/dashboardvendedor"
+              element={<SellerDashboard />}
+              greeting="Tablero de ventas"
+            />
+            <Route
+              path="/dashboardsupervisor"
+              element={<SellerDashboard />}
+              greeting="Tablero de supervisión"
+            />
+            <Route
+              path="/admindashboard"
+              element={<AdminDashboard />}
+              greeting="Tablero de administración"
+            />
             <Route path="*" element={<Error404 />} />
           </Routes>
           <Footer />
