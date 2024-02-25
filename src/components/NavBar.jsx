@@ -172,7 +172,7 @@ function NavBar() {
               ) : (
                 <>
                   <img
-                    src="https://img2.freepng.es/20190622/uih/kisspng-person-computer-icons-question-mark-portable-netwo-5d0ee9ed8a09b7.9577084615612584775654.jpg"
+                    src="https://firebasestorage.googleapis.com/v0/b/financiado-997ba.appspot.com/o/profile_images%2FIconoUsuarioConfig2.jpg?alt=media&token=32f86d20-70bc-422c-ae5d-19da47574d33"
                     alt="Default User"
                     width="32"
                     height="32"
