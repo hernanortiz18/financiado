@@ -132,6 +132,9 @@ function NavBar() {
             <NavLink to="category/destacados" className="nav-link">
               Maquinaria Vial
             </NavLink>
+            <NavLink to="formeq" className="nav-link">
+              Equinos
+            </NavLink>
             <NavLink to="consigna" className="nav-link">
               Vendé con nosotros
             </NavLink>

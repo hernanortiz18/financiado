@@ -18,6 +18,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import { Consigna } from "./components/Consigna";
 import MassVehicleUpload from "./components/vehicles/MassVehicleUpload";
 import VehicleEdit from "./components/vehicles/VehicleEdit";
+import EquineEdit from "./components/equines/EquineEdit";
 // import Map from "./components/Map";
 
 function App() {
@@ -65,6 +66,15 @@ function App() {
                 <VehicleEdit
                   registro={true}
                   greeting="Formulario para carga de automotores"
+                />
+              }
+            />
+            <Route
+              path="/formeq"
+              element={
+                <EquineEdit
+                  registro={true}
+                  greeting="Formulario para carga de equinos"
                 />
               }
             />

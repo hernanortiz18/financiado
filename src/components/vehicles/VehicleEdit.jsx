@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import {
   getFirestore,
   collection,
   doc,
+  addDoc,
   getDoc,
   updateDoc,
   serverTimestamp,
@@ -14,41 +15,10 @@ import { useAuth } from "../../contexts/AuthContext";
 import Alert from "../Alert";
 import ReCaptcha from "../ReCaptcha";
 
-const saveVehicleData = async (data, id) => {
-  try {
-    const fechaModificacion = serverTimestamp();
-    const updatedVehicleData = {
-      ...data,
-      FECHAMODIFICACION: fechaModificacion,
-      USUARIOMODIFICACION: userNameComplete,
-    };
-
-    if (id) {
-      const vehicleDocRef = doc(db, "automotores", id);
-      await updateDoc(vehicleDocRef, updatedVehicleData);
-      console.log("Datos del vehículo actualizados con éxito");
-    } else {
-      // Crear un nuevo automóvil
-      const newVehicleRef = collection(db, "automotores");
-      await setDoc(newVehicleRef, updatedVehicleData);
-      console.log("Nuevo vehículo creado con éxito");
-    }
-
-    setShowSuccessAlert(true);
-    setTimeout(() => {
-      setShowSuccessAlert(false);
-      // Restablecer el formulario o redirigir
-    }, 2000);
-  } catch (error) {
-    console.error("Error al guardar datos del vehículo:", error);
-  }
-};
-
 const VehicleEdit = () => {
   const { id } = useParams();
   const storage = getStorage();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
   const { user, userRole, userName, userLastName } = useAuth();
   const [userNameComplete, setUserNameComplete] = useState("");
 
@@ -74,36 +44,8 @@ const VehicleEdit = () => {
   }
   const db = getFirestore();
 
-  const subirArchivo = async () => {
-    if (!selectedFile) {
-      alert("Por favor, selecciona un archivo");
-      return;
-    }
-
-    try {
-      const storageRef = ref(storage, `vehiclesimg/${selectedFile.name}`);
-      await uploadBytes(storageRef, selectedFile);
-      console.log("Terminó la descarga...");
-
-      const url = await getDownloadURL(storageRef);
-      console.log("URL de descarga:", url);
-
-      setVehicleData((prevData) => ({
-        ...prevData,
-        IMAGEN: {
-          ...prevData.IMAGEN,
-          DESTACADA: url,
-        },
-      }));
-
-      setSelectedFile(null);
-    } catch (error) {
-      console.error("Error al subir archivo:", error);
-    }
-  };
-
   const [vehicleData, setVehicleData] = useState({
-    // Inicializa los campos según tus necesidades
+    // Inicializa los campos
     CONCESIONARIO: "SUPERAUTO",
     DOMINIO: "",
     ESTADOACTIVO: false,
@@ -126,11 +68,6 @@ const VehicleEdit = () => {
   });
 
   useEffect(() => {
-    if (!id) {
-      console.error("El id del automotor no está definido correctamente.");
-      return;
-    }
-
     const fetchVehicleData = async () => {
       try {
         const vehicleDocRef = doc(db, "automotores", id);
@@ -159,6 +96,35 @@ const VehicleEdit = () => {
     }));
   };
 
+  const handleImageUpdate = async (vehicleData) => {
+    try {
+      const updatedImageData = { ...vehicleData };
+      
+      for (const key of Object.keys(updatedImageData.IMAGEN)) {
+        const file = updatedImageData.IMAGEN[key];
+        
+        // Verificar si se cargó una nueva imagen
+        if (file instanceof File) {
+          const storageRef = ref(storage, `vehiclesimg/${file.name}`);
+          await uploadBytes(storageRef, file);
+          console.log("Terminó la descarga...");
+  
+          const url = await getDownloadURL(storageRef);
+          console.log("URL de descarga:", url);
+  
+          // Actualizar la URL de la imagen en los datos del vehículo
+          updatedImageData.IMAGEN[key] = url;
+        }
+      }
+  
+      return updatedImageData;
+    } catch (error) {
+      console.error("Error al actualizar las imágenes del vehículo:", error);
+      throw error;
+    }
+  };
+  
+
   const handleImageUpload = async (e, type) => {
     const file = e.target.files[0];
 
@@ -182,13 +148,28 @@ const VehicleEdit = () => {
     } catch (error) {
       console.error("Error al subir archivo:", error);
     }
-    saveVehicleData(vehicleData, id);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    saveVehicleData(vehicleData, id);
+    if (id) {
+      // Si hay un ID definido, significa que estás editando un automóvil existente
+      try {
+        // Manejar las imágenes primero
+        const updatedImageData = await handleImageUpdate(vehicleData);
+        // Actualizar los datos del vehículo con las nuevas URLs de las imágenes
+        await saveVehicleData(updatedImageData, id);
+      } catch (error) {
+        console.error("Error al actualizar las imágenes del vehículo:", error);
+      }
+    } else {
+      // Si no hay ID definido, significa que estás creando un nuevo automóvil
+      // Guardar los datos del vehículo directamente
+      saveVehicleData(vehicleData);
+    }
   };
+  
+  
 
   const handleSwitchChange = (e) => {
     const { name } = e.target;
@@ -207,7 +188,7 @@ const VehicleEdit = () => {
     activo: "Falso",
     destacado: "Falso",
   });
-  const saveVehicleData = async (data, id) => {
+  const saveVehicleData = async (data, id = null) => {
     try {
       const fechaModificacion = serverTimestamp();
       const updatedVehicleData = {
@@ -223,7 +204,7 @@ const VehicleEdit = () => {
       } else {
         // Crear un nuevo automóvil
         const newVehicleRef = collection(db, "automotores");
-        await setDoc(newVehicleRef, updatedVehicleData);
+        await addDoc(newVehicleRef, updatedVehicleData);
         console.log("Nuevo vehículo creado con éxito");
       }
 
