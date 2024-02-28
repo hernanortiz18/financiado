@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import { ItemList } from "./ItemList";
-import { Item } from "./Item";
+// import { Item } from "./Item";
 import {
   getFirestore,
   collection,
@@ -10,7 +10,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import Map from "./Map";
+// import Map from "./Map";
 
 export const ItemListContainer = (props) => {
   const [items, setItems] = useState([]);

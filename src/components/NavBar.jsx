@@ -103,7 +103,7 @@ function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <NavDropdown title="Automotores">
-              <NavDropdown.Divider />
+              {/* <NavDropdown.Divider /> */}
               <NavDropdown.Item
                 as={NavLink}
                 to="category/0kms"
@@ -126,13 +126,27 @@ function NavBar() {
                 Destacados
               </NavDropdown.Item>
             </NavDropdown>
-            <NavLink to="category/destacados" className="nav-link">
-              Maquinaria Agrícola
-            </NavLink>
-            <NavLink to="category/destacados" className="nav-link">
-              Maquinaria Vial
-            </NavLink>
-            <NavLink to="formeq" className="nav-link">
+
+
+            <NavDropdown title="Agro-vial">
+              {/* <NavDropdown.Divider /> */}
+              <NavDropdown.Item
+                as={NavLink}
+                to="category/0kms"
+                className="nav-link"
+              >
+                Maquinaria Agrícola
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                as={NavLink}
+                to="category/usados"
+                className="nav-link"
+              >
+                Maquinaria Vial
+              </NavDropdown.Item>
+            </NavDropdown>
+
+            <NavLink to="equines" className="nav-link">
               Equinos
             </NavLink>
             <NavLink to="consigna" className="nav-link">

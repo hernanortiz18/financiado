@@ -19,6 +19,7 @@ import { Consigna } from "./components/Consigna";
 import MassVehicleUpload from "./components/vehicles/MassVehicleUpload";
 import VehicleEdit from "./components/vehicles/VehicleEdit";
 import EquineEdit from "./components/equines/EquineEdit";
+import { EquineListContainer } from "./components/equines/EquineListContainer";
 // import Map from "./components/Map";
 
 function App() {
@@ -66,6 +67,15 @@ function App() {
                 <VehicleEdit
                   registro={true}
                   greeting="Formulario para carga de automotores"
+                />
+              }
+            />
+            <Route
+              path="/equines"
+              element={
+                <EquineListContainer
+                  // registro={true}
+                  greeting="Equinos"
                 />
               }
             />
