@@ -20,6 +20,7 @@ import MassVehicleUpload from "./components/vehicles/MassVehicleUpload";
 import VehicleEdit from "./components/vehicles/VehicleEdit";
 import EquineEdit from "./components/equines/EquineEdit";
 import { EquineListContainer } from "./components/equines/EquineListContainer";
+import EquineTable from "./components/equines/EquineTable";
 // import Map from "./components/Map";
 
 function App() {
@@ -80,6 +81,15 @@ function App() {
               }
             />
             <Route
+              path="/equinetable"
+              element={
+                <EquineTable
+                  // registro={true}
+                  greeting="Equinos"
+                />
+              }
+            />
+            <Route
               path="/formeq"
               element={
                 <EquineEdit
@@ -87,6 +97,10 @@ function App() {
                   greeting="Formulario para carga de equinos"
                 />
               }
+            />
+            <Route
+              path="editarequino/:id"
+              element={<EquineEdit greeting="Editar equino" />}
             />
             <Route
               path="/massivevehicleform"

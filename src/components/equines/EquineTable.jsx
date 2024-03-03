@@ -9,161 +9,161 @@ import {
 import { Button, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const VehicleList = () => {
+const EquineTable = () => {
   const { userRole } = useAuth();
   // Verifica si el usuario tiene el rol necesario
   if (!["VENDEDOR", "SUPERVISOR", "ADMINISTRADOR"].includes(userRole)) {
     return (
       <div className="container">
-        <h3>No tienes permisos para acceder a esta página.</h3>
+        <h3>No tienes permisos para acceder a este módulo.</h3>
       </div>
     );
   }
   const db = getFirestore();
-  const [vehicles, setVehicles] = useState([]);
-  const [localVehicles, setLocalVehicles] = useState([]);
-  const [filterMarca, setFilterMarca] = useState("");
-  const [filterModelo, setFilterModelo] = useState("");
-  const [filterCombustible, setFilterCombustible] = useState("");
+  const [equines, setEquines] = useState([]);
+  const [localEquines, setLocalEquines] = useState([]);
+  const [filterCriador, setFilterCriador] = useState("");
+  const [filterRaza, setFilterRaza] = useState("");
+  const [filterPropietario, setFilterPropietario] = useState("");
   const [sortBy, setSortBy] = useState(""); // Puede ser 'añoAsc', 'añoDesc', 'precioAsc', 'precioDesc'
-  const [combustibleOptions, setCombustibleOptions] = useState([]); // Opciones de combustible
-  const [showMarcaOptions, setShowMarcaOptions] = useState(false);
-  const [showModeloOptions, setShowModeloOptions] = useState(false);
-  const [showCombustibleOptions, setShowCombustibleOptions] = useState(false);
+  const [propietarioOptions, setPropietarioOptions] = useState([]); // Opciones de propietario
+  const [showCriadorOptions, setShowCriadorOptions] = useState(false);
+  const [showRazaOptions, setShowRazaOptions] = useState(false);
+  const [showPropietarioOptions, setShowPropietarioOptions] = useState(false);
 
   useEffect(() => {
-    const fetchVehicles = async () => {
+    const fetchEquines = async () => {
       try {
-        const vehiclesRef = collection(db, "automotores");
-        const queryFirestore = firestoreQuery(vehiclesRef);
+        const equinesRef = collection(db, "equines");
+        const queryFirestore = firestoreQuery(equinesRef);
 
         const querySnapshot = await getDocs(queryFirestore);
-        const vehiclesData = querySnapshot.docs.map((doc) => ({
+        const equinesData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        const vehiclesDataUpperCase = vehiclesData.map((vehicle) => ({
-          id: vehicle.id,
-          marca: (vehicle.marca || '').toUpperCase(), // Verificar si vehicle.marca es undefined o nulo
-          modelo: (vehicle.modelo || '').toUpperCase(), // Verificar si vehicle.modelo es undefined o nulo
-          combustible: (vehicle.combustible || '').toUpperCase(), // Verificar si vehicle.combustible es undefined o nulo
+        const equinesDataUpperCase = equinesData.map((equine) => ({
+          id: equine.id,
+          criador: (equine.CRIADOR || "").toUpperCase(),
+          raza: (equine.RAZA || "").toUpperCase(),
+          propietario: (equine.PROPIETARIO || "").toUpperCase(),
         }));
 
-        setLocalVehicles(vehiclesDataUpperCase);
-        setVehicles(vehiclesDataUpperCase);
-        // Obtener las opciones únicas de combustible
-        const uniqueCombustibleOptions = Array.from(
-          new Set(vehiclesDataUpperCase.map((vehicle) => vehicle.combustible))
+        setLocalEquines(equinesDataUpperCase);
+        setEquines(equinesDataUpperCase);
+        // Obtener las opciones únicas de propietario
+        const uniquePropietarioOptions = Array.from(
+          new Set(equinesDataUpperCase.map((equine) => equine.PROPIETARIO))
         );
 
         // Filtrar opciones duplicadas y agregar la opción "Todos"
-        const filteredCombustibleOptions = [
+        const filteredPropietarioOptions = [
           "Todos",
-          ...uniqueCombustibleOptions,
+          ...uniquePropietarioOptions,
         ];
 
-        setCombustibleOptions(filteredCombustibleOptions);
+        setPropietarioOptions(filteredPropietarioOptions);
       } catch (error) {
-        console.error("Error buscando automotores:", error);
+        console.error("Error buscando equinos:", error);
       }
     };
 
-    fetchVehicles();
+    fetchEquines();
   }, [db]);
 
   useEffect(() => {
     // Filtrar y ordenar localmente
-    let filteredVehicles = [...localVehicles];
+    let filteredEquines = [...localEquines];
 
-    if (filterMarca) {
-      const uppercaseFilterMarca = filterMarca.toUpperCase().trim();
-      filteredVehicles = filteredVehicles.filter((vehicle) =>
-        vehicle.marca.includes(uppercaseFilterMarca)
+    if (filterCriador) {
+      const uppercaseFilterCriador = filterCriador.toUpperCase().trim();
+      filteredEquines = filteredEquines.filter((equine) =>
+        equine.CRIADOR.includes(uppercaseFilterCriador)
       );
     }
 
-    if (filterModelo) {
-      const uppercaseFilterModelo = filterModelo.toUpperCase().trim();
-      filteredVehicles = filteredVehicles.filter((vehicle) =>
-        vehicle.modelo.includes(uppercaseFilterModelo)
+    if (filterRaza) {
+      const uppercaseFilterRaza = filterRaza.toUpperCase().trim();
+      filteredEquines = filteredEquines.filter((equine) =>
+        equine.RAZA.includes(uppercaseFilterRaza)
       );
     }
 
-    if (filterCombustible && filterCombustible !== "Todos") {
-      const uppercaseFilterCombustible = filterCombustible.toUpperCase().trim();
-      filteredVehicles = filteredVehicles.filter((vehicle) =>
-        vehicle.combustible.includes(uppercaseFilterCombustible)
+    if (filterPropietario && filterPropietario !== "Todos") {
+      const uppercaseFilterPropietario = filterPropietario.toUpperCase().trim();
+      filteredEquines = filteredEquines.filter((equine) =>
+        equine.PROPIETARIO.includes(uppercaseFilterPropietario)
       );
     }
 
     if (sortBy) {
       const orderField = sortBy.includes("año") ? "año" : "precio";
       const orderDirection = sortBy.includes("Asc") ? 1 : -1;
-      filteredVehicles.sort((a, b) => {
+      filteredEquines.sort((a, b) => {
         if (a[orderField] < b[orderField]) return -orderDirection;
         if (a[orderField] > b[orderField]) return orderDirection;
         return 0;
       });
     }
 
-    setVehicles(filteredVehicles);
-  }, [localVehicles, filterMarca, filterModelo, filterCombustible, sortBy]);
+    setEquines(filteredEquines);
+  }, [localEquines, filterCriador, filterRaza, filterPropietario, sortBy]);
 
-  const handleFilterMarca = (value) => {
-    setFilterMarca(value);
-    setShowMarcaOptions(false);
+  const handleFilterCriador = (value) => {
+    setFilterCriador(value);
+    setShowCriadorOptions(false);
     applyFiltersLocally();
   };
 
-  const handleFilterModelo = (value) => {
-    setFilterModelo(value);
-    setShowModeloOptions(false);
+  const handleFilterRaza = (value) => {
+    setFilterRaza(value);
+    setShowRazaOptions(false);
     applyFiltersLocally();
   };
 
-  const handleFilterCombustible = (value) => {
-    setFilterCombustible(value.toUpperCase());
-    setShowCombustibleOptions(false);
+  const handleFilterPropietario = (value) => {
+    setFilterPropietario(value.toUpperCase());
+    setShowPropietarioOptions(false);
     applyFiltersLocally();
   };
 
   const handleUpdateFromServer = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, "automotores"));
-      const updatedVehiclesData = querySnapshot.docs.map((doc) => ({
+      const querySnapshot = await getDocs(collection(db, "equines"));
+      const updatedEquinesData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
 
-      setLocalVehicles(updatedVehiclesData);
-      setVehicles(updatedVehiclesData);
+      setLocalEquines(updatedEquinesData);
+      setEquines(updatedEquinesData);
     } catch (error) {
-      console.error("Error updating vehicles from server:", error);
+      console.error("Error updating equines from server:", error);
     }
   };
 
   return (
     <div className="container">
-      <h3 className="title">Lista de Automotores</h3>
+      <h3 className="title">Lista de Equinos</h3>
 
       {/* Controles de Filtros y Orden */}
       <div className="mb-3">
-        <label className="me-2">Filtrar por Marca:</label>
+        <label className="me-2">Filtrar por Criador:</label>
         <div className="filter-container">
           <input
             type="text"
-            value={filterMarca}
-            onChange={(e) => handleFilterMarca(e.target.value)}
-            onClick={() => setShowMarcaOptions(true)}
+            value={filterCriador}
+            onChange={(e) => handleFilterCriador(e.target.value)}
+            onClick={() => setShowCriadorOptions(true)}
           />
-          {showMarcaOptions && (
+          {showCriadorOptions && (
             <div className="filter-options">
-              {vehicles
-                .map((vehicle) => vehicle.marca)
+              {equines
+                .map((equine) => equine.CRIADOR)
                 .filter((value, index, self) => self.indexOf(value) === index)
                 .map((option, index) => (
-                  <div key={index} onClick={() => handleFilterMarca(option)}>
+                  <div key={index} onClick={() => handleFilterCriador(option)}>
                     {option}
                   </div>
                 ))}
@@ -171,21 +171,21 @@ const VehicleList = () => {
           )}
         </div>
 
-        <label className="mx-2">Filtrar por Modelo:</label>
+        <label className="mx-2">Filtrar por Raza:</label>
         <div className="filter-container">
           <input
             type="text"
-            value={filterModelo}
-            onChange={(e) => handleFilterModelo(e.target.value)}
-            onClick={() => setShowModeloOptions(true)}
+            value={filterRaza}
+            onChange={(e) => handleFilterRaza(e.target.value)}
+            onClick={() => setShowRazaOptions(true)}
           />
-          {showModeloOptions && (
+          {showRazaOptions && (
             <div className="filter-options">
-              {vehicles
-                .map((vehicle) => vehicle.modelo)
+              {equines
+                .map((equine) => equine.RAZA)
                 .filter((value, index, self) => self.indexOf(value) === index)
                 .map((option, index) => (
-                  <div key={index} onClick={() => handleFilterModelo(option)}>
+                  <div key={index} onClick={() => handleFilterRaza(option)}>
                     {option}
                   </div>
                 ))}
@@ -193,25 +193,25 @@ const VehicleList = () => {
           )}
         </div>
 
-        <label className="mx-2">Filtrar por Combustible:</label>
+        <label className="mx-2">Filtrar por Propietario:</label>
         <div className="filter-container">
           <select
-            value={filterCombustible}
-            onChange={(e) => handleFilterCombustible(e.target.value)}
-            onClick={() => setShowCombustibleOptions(true)}
+            value={filterPropietario}
+            onChange={(e) => handleFilterPropietario(e.target.value)}
+            onClick={() => setShowPropietarioOptions(true)}
           >
-            {combustibleOptions.map((option, index) => (
+            {propietarioOptions.map((option, index) => (
               <option key={index} value={option}>
                 {option}
               </option>
             ))}
           </select>
-          {showCombustibleOptions && (
+          {showPropietarioOptions && (
             <div className="filter-options">
-              {combustibleOptions.map((option, index) => (
+              {propietarioOptions.map((option, index) => (
                 <div
                   key={index}
-                  onClick={() => handleFilterCombustible(option)}
+                  onClick={() => handleFilterPropietario(option)}
                 >
                   {option}
                 </div>
@@ -238,19 +238,22 @@ const VehicleList = () => {
         </Button>
       </div>
 
-      {/* Tabla de Automotores */}
+      {/* Tabla de Equinos */}
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th onClick={() => setSortBy("marca")}>Marca</th>
-            <th onClick={() => setSortBy("modelo")}>Modelo</th>
-            <th>Versión</th>
-            <th onClick={() => setSortBy("año")}>
-              Año {sortBy === "añoAsc" ? "↑" : sortBy === "añoDesc" ? "↓" : ""}
+            <th onClick={() => setSortBy("CRIADOR")}>Criador</th>
+            <th onClick={() => setSortBy("RAZA")}>Raza</th>
+            <th>Nombre</th>
+            <th onClick={() => setSortBy("MADRE")}>Madre</th>
+            <th onClick={() => setSortBy("PADRE")}>Padre</th>
+            <th onClick={() => setSortBy("FECHANACIMIENTO")}>
+              Nacimiento{" "}
+              {sortBy === "añoAsc" ? "↑" : sortBy === "añoDesc" ? "↓" : ""}
             </th>
-            <th>Dominio</th>
-            <th onClick={() => setSortBy("combustible")}>
-              Combustible{" "}
+            <th>Sexo</th>
+            <th onClick={() => setSortBy("PROPIETARIO")}>
+              Propietario{" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -262,8 +265,8 @@ const VehicleList = () => {
                 <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
               </svg>
             </th>
-            <th>
-              Kms{" "}
+            {/* <th>
+              Edad{" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -284,31 +287,33 @@ const VehicleList = () => {
               >
                 <path d="M3.204 11h9.592L8 5.519zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659" />
               </svg>
-            </th>
-            <th onClick={() => setSortBy("precio")}>
-              Precio{" "}
+            </th> */}
+            {/* <th onClick={() => setSortBy("precio")}>
+              Precio
               {sortBy === "precioAsc"
                 ? "↑"
                 : sortBy === "precioDesc"
                 ? "↓"
                 : ""}
-            </th>
+            </th> */}
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {vehicles.map((vehicle) => (
-            <tr key={vehicle.id}>
-              <td>{vehicle.marca}</td>
-              <td>{vehicle.modelo}</td>
-              <td>{vehicle.version}</td>
-              <td>{vehicle.YEAR}</td>
-              <td>{vehicle.dominio}</td>
-              <td>{vehicle.combustible}</td>
-              <td>{vehicle.kms}</td>
-              <td>{vehicle.precio}</td>
+          {equines.map((equine) => (
+            <tr key={equine.id}>
+              <td>{equine.CRIADOR}</td>
+              <td>{equine.RAZA}</td>
+              <td>{equine.NOMBRE}</td>
+              <td>{equine.MADRE}</td>
+              <td>{equine.PADRE}</td>
+              <td>{equine.FECHANACIMIENTO}</td>
+              <td>{equine.SEXO}</td>
+              <td>{equine.PROPIETARIO}</td>
+              {/* <td>{equine.kms}</td> */}
+              {/* <td>{equine.precio}</td> */}
               <td>
-                <Link to={`/editarautomotor/${vehicle.id}`}>
+                <Link to={`/editarequino/${equine.id}`}>
                   <Button variant="primary">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -332,4 +337,4 @@ const VehicleList = () => {
   );
 };
 
-export default VehicleList;
+export default EquineTable;

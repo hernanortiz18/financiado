@@ -88,6 +88,23 @@ export const EquineListContainer = (props) => {
             </div>
           )}
         </div>
+        <div>
+          {user ? (
+            <div>
+            <br/>
+              <NavLink to="/equinetable">
+                <Button>Ver Tabla</Button>
+              </NavLink>
+            </div>
+          ) : (
+            <div>
+              <p>Inicia sesión para ver tabla de equinos</p>
+              <NavLink to="/login">
+                <Button>Loguearse</Button>
+              </NavLink>
+            </div>
+          )}
+        </div>
       </Container>
     </>
   );

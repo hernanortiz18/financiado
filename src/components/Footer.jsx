@@ -13,7 +13,7 @@ function Footer() {
           </NavLink>
         </div>
 
-        <ul className="nav col-md-4 justify-content-center list-unstyled d-flex">
+        {/* <ul className="nav col-md-4 justify-content-center list-unstyled d-flex">
           <li className="ms-3">
             <a
               className="text-muted"
@@ -48,7 +48,7 @@ function Footer() {
               </svg>
             </a>
           </li>
-        </ul>
+        </ul> */}
         <div className="col-md-4 d-flex align-items-center">
           <span className="mb-3 mb-md-0 text-muted">
             &copy; 2024 Web APP development by https://ono.ar
