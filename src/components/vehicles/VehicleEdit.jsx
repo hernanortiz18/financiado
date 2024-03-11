@@ -14,6 +14,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useAuth } from "../../contexts/AuthContext";
 import Alert from "../Alert";
 import ReCaptcha from "../ReCaptcha";
+import CancelButton from "../tinyComponents/CancelButton";
 
 const VehicleEdit = () => {
   const { id } = useParams();
@@ -75,6 +76,14 @@ const VehicleEdit = () => {
 
         if (vehicleSnapshot.exists()) {
           // Obtiene los datos del vehículo y actualiza el estado
+          const data = vehicleSnapshot.data();
+          // Verificar si algún campo es undefined y establecerlo como un string vacío
+          Object.keys(data).forEach((key) => {
+            if (data[key] === undefined) {
+              data[key] = "";
+            }
+          });
+          // Actualizar el estado vehicleData
           setVehicleData(vehicleSnapshot.data());
         } else {
           console.error("El vehículo no existe");
@@ -99,31 +108,30 @@ const VehicleEdit = () => {
   const handleImageUpdate = async (vehicleData) => {
     try {
       const updatedImageData = { ...vehicleData };
-      
+
       for (const key of Object.keys(updatedImageData.IMAGEN)) {
         const file = updatedImageData.IMAGEN[key];
-        
+
         // Verificar si se cargó una nueva imagen
         if (file instanceof File) {
           const storageRef = ref(storage, `vehiclesimg/${file.name}`);
           await uploadBytes(storageRef, file);
           console.log("Terminó la descarga...");
-  
+
           const url = await getDownloadURL(storageRef);
           console.log("URL de descarga:", url);
-  
+
           // Actualizar la URL de la imagen en los datos del vehículo
           updatedImageData.IMAGEN[key] = url;
         }
       }
-  
+
       return updatedImageData;
     } catch (error) {
       console.error("Error al actualizar las imágenes del vehículo:", error);
       throw error;
     }
   };
-  
 
   const handleImageUpload = async (e, type) => {
     const file = e.target.files[0];
@@ -168,8 +176,6 @@ const VehicleEdit = () => {
       saveVehicleData(vehicleData);
     }
   };
-  
-  
 
   const handleSwitchChange = (e) => {
     const { name } = e.target;
@@ -217,7 +223,6 @@ const VehicleEdit = () => {
       console.error("Error al guardar datos del vehículo:", error);
     }
   };
-
   return (
     <div className="container">
       <div className="row">
@@ -343,10 +348,7 @@ const VehicleEdit = () => {
                   id="imagenDestacada"
                   onChange={(e) => handleImageUpload(e, "DESTACADA")}
                 />
-                </div>
-                {/* <button type="button" onClick={subirArchivo}>
-                Subir Imagen
-              </button> */}
+              </div>
               <div className="mb-3">
                 <label htmlFor="imagenFrente" className="form-label">
                   Imagen Frente
@@ -358,9 +360,6 @@ const VehicleEdit = () => {
                   id="imagenFrente"
                   onChange={(e) => handleImageUpload(e, "FRENTE")}
                 />
-                {/* <button type="button" onClick={subirArchivo}>
-                Subir Imagen
-              </button> */}
               </div>
               <div className="mb-3">
                 <label htmlFor="imagenInterior" className="form-label">
@@ -373,9 +372,6 @@ const VehicleEdit = () => {
                   id="imagenInterior"
                   onChange={(e) => handleImageUpload(e, "INTERIOR")}
                 />
-                {/* <button type="button" onClick={subirArchivo}>
-                Subir Imagen
-              </button> */}
               </div>
               <div className="mb-3">
                 <label htmlFor="imagenLateral" className="form-label">
@@ -388,9 +384,6 @@ const VehicleEdit = () => {
                   id="imagenLateral"
                   onChange={(e) => handleImageUpload(e, "LATERAL")}
                 />
-                {/* <button type="button" onClick={subirArchivo}>
-                Subir Imagen
-              </button> */}
               </div>
               <div className="mb-3">
                 <label htmlFor="imagenTrasera" className="form-label">
@@ -403,14 +396,12 @@ const VehicleEdit = () => {
                   id="imagenTrasera"
                   onChange={(e) => handleImageUpload(e, "TRASERA")}
                 />
-                {/* <button type="button" onClick={subirArchivo}>
-                Subir Imagen
-              </button> */}
               </div>
               <ReCaptcha />
               <button type="submit" className="btn btn-primary">
                 Guardar Cambios
               </button>
+              <CancelButton />
             </form>
           </div>
         </div>

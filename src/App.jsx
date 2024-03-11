@@ -21,6 +21,7 @@ import VehicleEdit from "./components/vehicles/VehicleEdit";
 import EquineEdit from "./components/equines/EquineEdit";
 import { EquineListContainer } from "./components/equines/EquineListContainer";
 import EquineTable from "./components/equines/EquineTable";
+import CreditProposal from "./components/creditOperations/CreditProposal";
 // import Map from "./components/Map";
 
 function App() {
@@ -30,8 +31,12 @@ function App() {
         <BrowserRouter>
           <NavBar />
           <Routes>
-            <Route
+          <Route
               path="/"
+              element={<CreditProposal greeting="Propuesta de Crédito" />}
+            />
+            <Route
+              path="/marketplace"
               element={<ItemListContainer greeting="Productos" />}
             />
             <Route
