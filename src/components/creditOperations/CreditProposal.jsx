@@ -127,7 +127,7 @@ const CreditProposal = () => {
         clienteApellido: "",
         clienteCUIL: "",
         fechaPropuesta: new Date().toISOString().slice(0, 10),
-        estadoPropuesta: "",
+        estadoPropuesta: "INICIAL",
         fechaEstado: new Date().toISOString().slice(0, 10),
         comentarios: "",
         proforma: "",
