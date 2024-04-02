@@ -9,7 +9,7 @@ function Footer() {
       <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
         <div className="col-md-4 d-flex align-items-center">
           <NavLink to="" className="navbar-brand">
-            <img src={logo} alt="Logo" width="200" />
+            <img src={logo} alt="Logo" width="100" />
           </NavLink>
         </div>
 

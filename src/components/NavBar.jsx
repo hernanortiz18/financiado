@@ -96,7 +96,7 @@ function NavBar() {
       <Container>
         <Navbar.Brand>
           <NavLink to="" className="navbar-brand">
-            <img src={logo} alt="Logo" width="200" />
+            <img src={logo} alt="Logo" width="100" />
           </NavLink>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
