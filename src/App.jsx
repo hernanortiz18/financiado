@@ -22,6 +22,9 @@ import EquineEdit from "./components/equines/EquineEdit";
 import { EquineListContainer } from "./components/equines/EquineListContainer";
 import EquineTable from "./components/equines/EquineTable";
 import CreditProposal from "./components/creditOperations/CreditProposal";
+import CreditProposalList from "./components/creditOperations/CreditProposalList";
+import EditCreditProposal from "./components/creditOperations/EditCreditProposal";
+
 // import Map from "./components/Map";
 
 function App() {
@@ -132,6 +135,10 @@ function App() {
             <Route path="/map" element={<Map />} />
             <Route path="/consigna" element={<Consigna />} />
             <Route path="/perfil" element={<ProfileEditor />} />
+
+            <Route path="/creditlist" element={<CreditProposalList />} />
+            <Route path="/editarpropuesta/:id" element={<EditCreditProposal/>} />
+
             <Route
               path="/dashboardvendedor"
               element={<SellerDashboard />}

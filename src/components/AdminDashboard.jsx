@@ -60,6 +60,12 @@ const SellerDashboard = () => {
         </Link>
       </section>
 
+      <section>
+        <h2>Propuestas de crédito</h2>
+        <Link to="/creditlist" className="btn btn-primary">
+          Ver propuestas de crédito
+        </Link>
+      </section>
 
 
       {/* Mis Ventas */}
