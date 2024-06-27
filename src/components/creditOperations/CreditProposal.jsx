@@ -15,7 +15,7 @@ const CreditProposal = () => {
     clienteApellido: "",
     clienteCUIL: "",
     fechaPropuesta: new Date().toISOString().slice(0, 10), // Fecha de carga inicial
-    estadoPropuesta: "",
+    estadoPropuesta: "INICIAL",
     fechaEstado: new Date().toISOString().slice(0, 10), // Fecha de última modificación
     comentarios: "",
     proforma: null, // Guardaremos el archivo aquí
